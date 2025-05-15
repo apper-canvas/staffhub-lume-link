@@ -113,7 +113,6 @@ export default function MainFeature() {
     if (editingEmployee) {
       handleUpdateEmployee();
     } else {
-    } else {
       handleAddEmployee();
     }
   };

@@ -36,7 +36,8 @@ export default function MainFeature() {
   const [employees, setEmployees] = useState(employeeData);
   const [filteredEmployees, setFilteredEmployees] = useState(employeeData);
   const [showAddForm, setShowAddForm] = useState(false);
-  const [searchQuery, setSearchQuery] = useState("");
+  const [editingEmployee, setEditingEmployee] = useState(null);
+  const [searchQuery, setSearchQuery] = useState("");  
   const [selectedDepartment, setSelectedDepartment] = useState("All Departments");
   const [showFilters, setShowFilters] = useState(false);
   
@@ -104,10 +105,13 @@ export default function MainFeature() {
     }
   };
   
-  const handleAddEmployee = (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
     
     if (!validateForm()) return;
+
+    if (editingEmployee) {
+      handleUpdateEmployee();
     
     // Add new employee
     setEmployees(prev => [...prev, { ...newEmployee }]);
@@ -129,12 +133,62 @@ export default function MainFeature() {
     // Show success toast
     toast.success("Employee added successfully!");
   };
+    } else {
+      handleAddEmployee();
+    }
+  };
+
+  const handleAddEmployee = () => {
+    // Add new employee
+    setEmployees(prev => [...prev, { ...newEmployee }]);
+    
+    // Reset form and hide it
+    setNewEmployee({
+      id: Math.max(...employees.map(e => e.id), 0) + 2,
+      firstName: "",
+      lastName: "",
+      email: "",
+      phone: "",
+      department: "",
+      position: "",
+      status: "active",
+      joinDate: new Date().toISOString().slice(0, 10)
+    });
+    setShowAddForm(false);
+    
+    // Show success toast
+    toast.success("Employee added successfully!");
+  };
+
+  const handleEditEmployee = (employee) => {
+    setEditingEmployee(employee);
+    setNewEmployee({ ...employee });
+    setShowAddForm(true);
+    setErrors({});
+  };
   
   const handleDeleteEmployee = (id) => {
     if (confirm("Are you sure you want to delete this employee?")) {
       setEmployees(prev => prev.filter(emp => emp.id !== id));
       toast.success("Employee deleted successfully!");
     }
+  };
+
+  const handleUpdateEmployee = () => {
+    // Update existing employee
+    setEmployees(prev => 
+      prev.map(emp => emp.id === editingEmployee.id ? { ...newEmployee } : emp)
+    );
+    
+    // Reset form and hide it
+    setNewEmployee({
+      id: Math.max(...employees.map(e => e.id), 0) + 2,
+      firstName: "", lastName: "", email: "", phone: "", department: "",
+      position: "", status: "active", joinDate: new Date().toISOString().slice(0, 10)
+    });
+    setShowAddForm(false);
+    setEditingEmployee(null);
+    toast.success("Employee updated successfully!");
   };
   
   const getStatusColor = (status) => {
@@ -174,7 +228,11 @@ export default function MainFeature() {
             
             <button 
               onClick={() => setShowAddForm(true)}
+              disabled={editingEmployee !== null}
               className="btn btn-primary flex-shrink-0"
+              onClickCapture={() => {
+                setEditingEmployee(null);
+              }}
             >
               <UserPlusIcon className="h-4 w-4" />
               <span className="hidden sm:inline">Add Employee</span>
@@ -245,16 +303,21 @@ export default function MainFeature() {
           >
             <div className="p-5 border border-surface-200 dark:border-surface-700 rounded-lg bg-surface-50 dark:bg-surface-800">
               <div className="flex justify-between items-center mb-4">
-                <h4 className="font-semibold text-lg">Add New Employee</h4>
+                <h4 className="font-semibold text-lg">
+                  {editingEmployee ? 'Edit Employee' : 'Add New Employee'}
+                </h4>
                 <button 
-                  onClick={() => setShowAddForm(false)}
+                  onClick={() => {
+                    setShowAddForm(false);
+                    setEditingEmployee(null);
+                  }}
                   className="p-1 hover:bg-surface-200 dark:hover:bg-surface-700 rounded-full"
                 >
                   <XIcon className="h-5 w-5" />
                 </button>
               </div>
               
-              <form onSubmit={handleAddEmployee}>
+              <form onSubmit={handleSubmit}>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
                   <div>
                     <label className="block text-sm font-medium mb-1">First Name *</label>
@@ -387,7 +450,10 @@ export default function MainFeature() {
                 <div className="flex justify-end gap-3 mt-6">
                   <button
                     type="button"
-                    onClick={() => setShowAddForm(false)}
+                    onClick={() => {
+                      setShowAddForm(false);
+                      setEditingEmployee(null);
+                    }}
                     className="btn border border-surface-300 dark:border-surface-600 hover:bg-surface-100 dark:hover:bg-surface-700"
                   >
                     Cancel
@@ -397,7 +463,9 @@ export default function MainFeature() {
                     className="btn btn-primary"
                   >
                     <CheckIcon className="h-4 w-4" />
-                    <span>Save Employee</span>
+                    <span>
+                      {editingEmployee ? 'Update Employee' : 'Save Employee'}
+                    </span>
                   </button>
                 </div>
               </form>
@@ -469,7 +537,10 @@ export default function MainFeature() {
                       </td>
                       <td className="px-4 py-4 whitespace-nowrap text-right text-sm font-medium">
                         <div className="flex justify-end gap-2">
-                          <button className="p-1 rounded hover:bg-surface-100 dark:hover:bg-surface-600 text-surface-600 dark:text-surface-300 hover:text-primary dark:hover:text-primary-light">
+                          <button
+                            onClick={() => handleEditEmployee(employee)}
+                            className="p-1 rounded hover:bg-surface-100 dark:hover:bg-surface-600 text-surface-600 dark:text-surface-300 hover:text-primary dark:hover:text-primary-light"
+                          >
                             <EditIcon className="h-4 w-4" />
                           </button>
                           <button 

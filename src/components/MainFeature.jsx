@@ -39,6 +39,7 @@ export default function MainFeature() {
   const [editingEmployee, setEditingEmployee] = useState(null);
   const [searchQuery, setSearchQuery] = useState("");  
   const [selectedDepartment, setSelectedDepartment] = useState("All Departments");
+  const [selectedStatus, setSelectedStatus] = useState("All Statuses");
   const [showFilters, setShowFilters] = useState(false);
   
   // Form state
@@ -77,8 +78,13 @@ export default function MainFeature() {
       filtered = filtered.filter(emp => emp.department === selectedDepartment);
     }
     
+    // Apply status filter
+    if (selectedStatus !== "All Statuses") {
+      filtered = filtered.filter(emp => emp.status === selectedStatus.toLowerCase());
+    }
+    
     setFilteredEmployees(filtered);
-  }, [searchQuery, selectedDepartment, employees]);
+  }, [searchQuery, selectedDepartment, selectedStatus, employees]);
   
   const validateForm = () => {
     const newErrors = {};
@@ -247,7 +253,11 @@ export default function MainFeature() {
                 
                 <div className="w-full sm:w-auto">
                   <label className="block text-sm font-medium mb-1">Status</label>
-                  <select className="input-field">
+                  <select 
+                    className="input-field"
+                    value={selectedStatus}
+                    onChange={(e) => setSelectedStatus(e.target.value)}
+                  >
                     <option>All Statuses</option>
                     <option>Active</option>
                     <option>On Leave</option>

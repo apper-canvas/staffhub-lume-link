@@ -112,27 +112,7 @@ export default function MainFeature() {
 
     if (editingEmployee) {
       handleUpdateEmployee();
-    
-    // Add new employee
-    setEmployees(prev => [...prev, { ...newEmployee }]);
-    
-    // Reset form and hide it
-    setNewEmployee({
-      id: Math.max(...employees.map(e => e.id), 0) + 2,
-      firstName: "",
-      lastName: "",
-      email: "",
-      phone: "",
-      department: "",
-      position: "",
-      status: "active",
-      joinDate: new Date().toISOString().slice(0, 10)
-    });
-    setShowAddForm(false);
-    
-    // Show success toast
-    toast.success("Employee added successfully!");
-  };
+    } else {
     } else {
       handleAddEmployee();
     }

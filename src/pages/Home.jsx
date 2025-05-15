@@ -1,6 +1,8 @@
 import { useState } from 'react';
 import { motion } from 'framer-motion';
 import { toast } from 'react-toastify';
+import Logo from '../assets/logo.svg';
+import DefaultAvatar from '../assets/default-avatar.svg';
 import MainFeature from '../components/MainFeature';
 import getIcon from '../utils/iconUtils';
 
@@ -32,10 +34,10 @@ export default function Home() {
       <div className="md:hidden flex justify-between items-center p-4 bg-white dark:bg-surface-800 border-b border-surface-200 dark:border-surface-700">
         <div className="flex items-center space-x-2">
           <img 
-            src="https://source.unsplash.com/kn-UmDZQDjM/100x100" 
+            src={Logo} 
             alt="StaffHub Logo" 
-            className="h-8 w-8 rounded-md"
-          />
+            className="h-8 w-8"
+          /> 
           <h1 className="text-xl font-bold bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
             StaffHub
           </h1>
@@ -59,9 +61,9 @@ export default function Home() {
           {/* Logo */}
           <div className="p-4 flex items-center space-x-3 border-b border-surface-200 dark:border-surface-700">
             <img 
-              src="https://source.unsplash.com/kn-UmDZQDjM/100x100" 
+              src={Logo} 
               alt="StaffHub Logo" 
-              className="h-10 w-10 rounded-md"
+              className="h-10 w-10"
             />
             <h1 className="text-xl font-bold bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
               StaffHub
@@ -125,7 +127,7 @@ export default function Home() {
             <div className="flex items-center space-x-3">
               <div className="relative">
                 <img 
-                  src="https://source.unsplash.com/Tu1XKJtLMQ4/100x100" 
+                  src={DefaultAvatar} 
                   alt="User avatar" 
                   className="h-10 w-10 rounded-full object-cover"
                 />
@@ -164,7 +166,7 @@ export default function Home() {
             </button>
             <div className="flex items-center space-x-2">
               <img 
-                src="https://source.unsplash.com/Tu1XKJtLMQ4/100x100" 
+                src={DefaultAvatar} 
                 alt="User avatar" 
                 className="h-8 w-8 rounded-full object-cover"
               />

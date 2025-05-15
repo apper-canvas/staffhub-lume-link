@@ -2,6 +2,8 @@ import { useState, useEffect } from 'react';
 import { Routes, Route } from 'react-router-dom';
 import { ToastContainer, toast } from 'react-toastify';
 import { motion, AnimatePresence } from 'framer-motion';
+import Logo from './assets/logo.svg';
+import DefaultAvatar from './assets/default-avatar.svg';
 
 // Pages
 import Home from './pages/Home';
